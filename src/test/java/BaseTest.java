@@ -18,12 +18,12 @@ import java.time.Duration;
 
 public class BaseTest {
 
-    WebDriver driver;
-    WebDriverWait wait;
-    ChromeOptions options;
-    String url = null;// https://qa.koel.app/"; // "https://app.testpro.io/";
-    Actions action;
-    FluentWait fluentWait;
+    protected WebDriver driver;
+    protected WebDriverWait wait;
+    protected ChromeOptions options;
+    private String url = null;// https://qa.koel.app/"; // "https://app.testpro.io/";
+    protected Actions action;
+    protected FluentWait fluentWait;
 
     @DataProvider(name="LoginNegativeTestData")
     public Object[][] getDataFromDataProvider(){
@@ -42,7 +42,8 @@ public class BaseTest {
     @Parameters({"baseUrl"})
     public void initMethod(String baseUrl){
         options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--remote-allow-origins=*","--disable-notifications","--remote-allow-origins=*", "--incognito","--start-maximized");
+        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
         this.driver = new ChromeDriver(options);
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         this.driver.manage().window().maximize();

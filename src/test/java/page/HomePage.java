@@ -8,13 +8,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class HomePage extends BasePage{
 
-    By avatarIcon = By.cssSelector("img.avatar");
-    By playlistEditField = By.xpath("//input[@data-testid=\"inline-playlist-name-input\"]");
+    private By avatarIcon = By.cssSelector("img.avatar");
+    private By playlistEditField = By.xpath("//input[@data-testid=\"inline-playlist-name-input\"]");
 
-    String replaceSubTxt = "@replaceText@";
-    String playlistOption = "//section[@id=\"playlists\"]//a[contains(text(),\"" + replaceSubTxt + "\")]";
+    private String replaceSubTxt = "@replaceText@";
+    private String playlistOption = "//section[@id=\"playlists\"]//a[contains(text(),\"" + replaceSubTxt + "\")]";
 
-    String findDisplayMsg = "//div[contains(text(),'"+ replaceSubTxt + "')]";
+    private String findDisplayMsg = "//div[contains(text(),'"+ replaceSubTxt + "')]";
 
     public HomePage(WebDriver givenDriver) {
         super(givenDriver);
