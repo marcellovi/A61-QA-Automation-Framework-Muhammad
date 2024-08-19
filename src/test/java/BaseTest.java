@@ -1,10 +1,12 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -14,11 +16,13 @@ import org.testng.annotations.*;
 import org.openqa.selenium.interactions.Actions;
 
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.time.Duration;
 
 public class BaseTest {
 
-    protected WebDriver driver;
+    protected static WebDriver driver;
     protected WebDriverWait wait;
     protected ChromeOptions options;
     private String url = null;// https://qa.koel.app/"; // "https://app.testpro.io/";
@@ -33,35 +37,73 @@ public class BaseTest {
         };
     }
 
+    public static WebDriver chooseBroswer(String browserName) throws MalformedURLException {
+
+        DesiredCapabilities caps = new DesiredCapabilities();
+        String gridUrl = "http://192.168.1.104:4444/"; // Used for selenium grid
+
+        try{
+            switch (browserName){
+                case "firefox":
+                    WebDriverManager.firefoxdriver().setup();
+                    return driver = new FirefoxDriver();
+                case "edge":
+                    WebDriverManager.edgedriver().setup();
+                    EdgeOptions edgeOptions = new EdgeOptions();
+                    edgeOptions.addArguments("--remote-allow-origins=*");
+                    return driver = new EdgeDriver(edgeOptions);
+                // Using Selenium Grid
+                case "grid-edge":
+                    caps.setCapability("browserName","MicrosoftEdge");
+                    return driver = new RemoteWebDriver(URI.create(gridUrl).toURL(),caps);
+                case "grid-firefox":
+                    caps.setCapability("browserName","firefox");
+                    return driver = new RemoteWebDriver(URI.create(gridUrl).toURL(),caps);
+                case "grid-chrome":
+                    caps.setCapability("browserName","chrome");
+                    return driver = new RemoteWebDriver(URI.create(gridUrl).toURL(),caps);
+                default:
+                    WebDriverManager.chromedriver().setup();
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.addArguments("--remote-allow-origins=*");
+                    return driver = new ChromeDriver(chromeOptions);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @BeforeSuite
     static void setupClass() {
-        WebDriverManager.chromedriver().setup();
+        //WebDriverManager.chromedriver().setup();
     }
 
     @BeforeMethod
     @Parameters({"baseUrl"})
-    public void initMethod(String baseUrl){
-        options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*","--disable-notifications","--remote-allow-origins=*", "--incognito","--start-maximized");
-        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-        this.driver = new ChromeDriver(options);
-        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        this.driver.manage().window().maximize();
-        this.wait = new WebDriverWait(this.driver,Duration.ofSeconds(10));
+    public void initMethod(String baseUrl) throws MalformedURLException {
+//        options = new ChromeOptions();
+//        options.addArguments("--remote-allow-origins=*", "--disable-notifications", "--remote-allow-origins=*", "--incognito", "--start-maximized");
+//        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+//        this.driver = new ChromeDriver(options);
+        driver = chooseBroswer(System.getProperty("browser")); // System.getProperty allows to get the property from Gradle
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        this.wait = new WebDriverWait(driver,Duration.ofSeconds(10));
         this.fluentWait = new FluentWait(Duration.ofSeconds(10))
                 .withTimeout(Duration.ofSeconds(10))
                 .pollingEvery(Duration.ofSeconds(2));
         this.url = baseUrl;
-        action = new Actions(this.driver);
+        action = new Actions(driver);
         openURL();
     }
 
     @AfterMethod
     public void endMethod(){
-        this.driver.quit();
+        driver.quit();
     }
 
     public void openURL(){
-        this.driver.get(this.url);
+        driver.get(this.url);
     }
 }
