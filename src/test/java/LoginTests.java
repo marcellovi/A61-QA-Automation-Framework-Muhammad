@@ -7,8 +7,8 @@ public class LoginTests extends BaseTest {
 
     @Test
     public void loginValidEmailPassword()  {
-        LoginPageFactory loginPageFactory = new LoginPageFactory(driver);
-        HomePageFactory homePageFactory = new HomePageFactory(driver);
+        LoginPageFactory loginPageFactory = new LoginPageFactory(getDriver());
+        HomePageFactory homePageFactory = new HomePageFactory(getDriver());
 
         // Fluent Way of Doing
         loginPageFactory.inputEmail("marcello.ferraz.vieira@testpro.io")
@@ -25,14 +25,14 @@ public class LoginTests extends BaseTest {
 
     @Test (enabled = true, priority = 3, description = "Login with invalid email and/or password", dataProvider = "LoginNegativeTestData")
     public void loginInvalidEmailPassword(String Email, String Password){
-        LoginPageFactory loginPageFactory = new LoginPageFactory(driver);
+        LoginPageFactory loginPageFactory = new LoginPageFactory(getDriver());
 
         loginPageFactory.inputEmail(Email);
         loginPageFactory.inputPassword(Password);
         loginPageFactory.clickSubmit();
 
         String url = "https://qa.koel.app/";
-        Assert.assertEquals(driver.getCurrentUrl(),url);
+        Assert.assertEquals(getDriver().getCurrentUrl(),url);
     }
 
 }
