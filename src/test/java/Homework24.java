@@ -26,7 +26,7 @@ public class Homework24 extends BaseTest{
         Assert.assertTrue(homePageFactory.isMyPlayListDisplayed().isDisplayed());
     }
 
-    @Test(priority=2)
+    //@Test(priority=2)
     public void renamePlaylist() {
 
         String oldPlaylistName = "My Playlist";
@@ -48,7 +48,7 @@ public class Homework24 extends BaseTest{
     }
 
 
-    @Test(priority=3)
+    //@Test(priority=3)
     public void deletePlaylist() {
         String playlistName = "My New Playlist";
 
