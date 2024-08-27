@@ -3,7 +3,7 @@ import org.testng.annotations.Test;
 import pageFactory.HomePageFactory;
 import pageFactory.LoginPageFactory;
 
-public class Homework24 extends BaseTest{
+public class Homework26 extends BaseTest{
 
     // creates playlist
     @Test(priority=1)
