@@ -12,7 +12,7 @@ public class LoginTests extends BaseTest {
 
         // Fluent Way of Doing
         loginPageFactory.inputEmail("marcello.ferraz.vieira@testpro.io")
-                .inputPassword("TestPro@1234")
+                .inputPassword("TestPro@123")
                 .clickSubmit();
 
 //        Normal Way
