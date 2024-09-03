@@ -36,7 +36,7 @@ public class HomePageFactory extends BasePageFactory {
     @FindBy( xpath = "//div[contains(text(),'My Playlist')]")
     WebElement myPlaylistConfirmMsg;
 
-    @FindBy(css="i[data-testid=\"sidebar-create-playlist-btn\"]")
+    @FindBy(xpath="//i[@data-testid=\"sidebar-create-playlist-btn\"]")
     WebElement btnPlusIcon;
 
     @FindBy(css="li[data-testid=\"playlist-context-menu-create-simple\"")
